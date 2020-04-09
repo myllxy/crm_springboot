@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.myllxy.crm.mapper.EmployeeMapper">
+  <!--获取用户名-->
+  <select id="selectByUsername" resultType="cn.myllxy.crm.domain.Employee">
+    SELECT * FROM t_employee WHERE username=#{username}
+  </select>
+  <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    INSERT INTO t_employee(username, realName, tel, email, state, dept_id, identity)
+    VALUES
+    (#{username},#{realName},#{tel},#{email},#{state},#{department.identity},#{identity})
+  </insert>
+  <delete id="delete">
+    DELETE FROM t_employee WHERE id=#{id}
+  </delete>
+  <delete id="batchDelete">
+    DELETE FROM t_employee WHERE id IN
+    <foreach collection="list" item="i" open="(" close=")" separator=",">
+      #{i.id}
+    </foreach>
+  </delete>
+  <update id="update">
+    UPDATE t_employee
+    <set>
+      <if test="username!=null and username!=''">
+        username=#{username},
+      </if>
+      <if test="realName!=null and realName!=''">
+        realName=#{realName},
+      </if>
+      <if test="tel!=null and tel!=''">
+        tel=#{tel},
+      </if>
+      <if test="email!=null and email!=''">
+        email=#{email},
+      </if>
+      <if test="state!=null">
+        state=#{state},
+      </if>
+      <if test="identity!=null">
+        identity=#{identity},
+      </if>
+    </set>
+    WHERE id=#{id}
+  </update>
+  <select id="selectById" resultMap="EmployeeResultMap">
+    SELECT * FROM t_employee WHERE id=#{id}
+  </select>
+  <!-- 查询所有员工用户名,返回给前台下拉框展示 -->
+  <select id="selectName" resultType="String">
+    SELECT username FROM t_employee
+  </select>
+  <!--<select id="selectAll" resultMap="EmployeeResultMap">-->
+    <!--SELECT e.id,e.username,e.realName,e.password,e.tel,e.email,e.inputTime,e.state,-->
+    <!--d.id did,d.identity didentity, d.name dname, d.dirPath ddirPath, d.state dstate-->
+    <!--FROM t_employee e JOIN t_department d-->
+    <!--ON e.dept_id = d.id-->
+  <!--</select>-->
+  <!--<select id="selectPageByQuery" resultMap="EmployeeResultMap">-->
+    <!--SELECT e.id,e.username,e.realName,e.tel,e.email,e.inputTime,e.state,e.identity,-->
+    <!--d.id did,d.name dname,d.identity didentity-->
+    <!--FROM t_employee e-->
+    <!--LEFT JOIN t_department d ON e.dept_id = d.identity-->
+    <!--<include refid="whereSql"/>-->
+    <!--LIMIT #{begin},#{pageSize}-->
+  <!--</select>-->
+  <resultMap id="EmployeeResultMap" type="cn.myllxy.crm.domain.Employee">
+    <id column="id" property="id"/>
+    <result column="username" property="username"/>
+    <result column="realName" property="realName"/>
+    <result column="password" property="password"/>
+    <result column="tel" property="tel"/>
+    <result column="email" property="email"/>
+    <result column="inputTime" property="inputTime"/>
+    <result column="state" property="state"/>
+    <result column="identity" property="identity"/>
+    <!--部门映射-->
+  </resultMap>
+  <select id="getTotalDataCount" resultType="long">
+    SELECT COUNT(*) FROM t_employee
+    <include refid="whereSql"/>
+  </select>
+  <sql id="whereSql">
+    <where>
+      <if test="username!=null and username!=''">
+        AND username LIKE CONCAT("%",#{username},"%")
+      </if>
+    </where>
+  </sql>
+  <!-- 返回给客户信息管理的下拉框使用 -->
+  <select id="getEmployee" resultMap="EmployeeResultMap">
+    SELECT e.id,e.username,e.realName,e.identity
+    FROM t_employee e
+  </select>
+  <!-- 通过name来找到对应的employee实体对象 -->
+  <select id="getEmployeeByName" resultMap="EmployeeResultMap">
+    SELECT e.id,e.username,e.realName,e.identity,e.password
+    FROM t_employee e
+    WHERE username=#{username}
+  </select>
+</mapper>
