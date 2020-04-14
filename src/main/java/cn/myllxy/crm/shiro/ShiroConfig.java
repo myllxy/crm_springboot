@@ -57,6 +57,8 @@ public class ShiroConfig {
         // 配置不会被拦截的链接 顺序判断
         //无需认证
         filterChainDefinitionMap.put("/user/login", "anon");
+        filterChainDefinitionMap.put("/like/likepost", "anon");
+        filterChainDefinitionMap.put("/like/unlikepost", "anon");
         filterChainDefinitionMap.put("/token/refreshtoken", "anon");
         filterChainDefinitionMap.put("/user/logout", "anon");
         //需要认证

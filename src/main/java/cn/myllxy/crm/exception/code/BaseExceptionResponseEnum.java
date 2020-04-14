@@ -14,8 +14,9 @@ public enum BaseExceptionResponseEnum implements ExceptionResponse {
     NOUSER(706, "没有该用户"),
     PASSWORDERROR(707, "密码错误"),
     LOGOUTSUCCESS(708, "登录成功"),
-    SYSTEMBUSY(709, "系统繁忙")
-    ;
+    SYSTEMBUSY(709, "系统繁忙"),
+    NOKEYINREDIS(800, "Redis中没有该key"),
+    REPEATTHEPRAISE(801, "用户不能重复点赞");
 
     private Integer code;
     private String msg;

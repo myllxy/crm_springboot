@@ -150,9 +150,4 @@ public class JwtTokenUtil {
         }
         return result;
     }
-
-    public static void main(String[] args) {
-    }
-
-
 }
